@@ -33,13 +33,11 @@ public class OrderScreen extends JFrame {
 
            @Override
            public int getRowCount() {
-
                return productList.size();
            }
 
            @Override
            public int getColumnCount() {
-
                return 5;
            }
 
@@ -75,15 +73,17 @@ public class OrderScreen extends JFrame {
                        if(field.getText().equals(productList.get(i).getSKU())){
                            Product p = productList.get(i);
                            int currentQuantity = p.getQuantity();
-                           p.setQuantity(currentQuantity + 1); //increment the quantity
+                           int newQuantity =  p.setQuantity(currentQuantity + 1); //increment the quantity
 
-                           int currentAmount = p.getAmount();
-                           p.setAmount(currentAmount + currentQuantity);
 
-                           total[0] = currentQuantity * p.getPrice();
+                          Double newAmount = p.setAmount((Double) (newQuantity * p.getPrice())); // set total amount of the product when its added
 
+                           total[0]=0;
+                           for(int j=0; j<productList.size();j++) {
+                               total[0] += productList.get(j).getAmount(); //calculate total
+                           }//update
                             totalAmount.setText("Total: " + total[0]);
-                           ((AbstractTableModel)table.getModel()).fireTableDataChanged();
+                           ((AbstractTableModel)table.getModel()).fireTableDataChanged(); //update table
 
                        }
                    }

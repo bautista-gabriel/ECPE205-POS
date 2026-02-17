@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-
 public class Product {
 
     private String SKU,Name;
     private Double Price;
-    private int quantity, amount;
+    private int quantity;
+        Double amount;
 
     public Product(String SKU, String name, Double price) {
         this.SKU = SKU;
@@ -16,20 +15,22 @@ public class Product {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public int setQuantity(int quantity) {
         this.quantity = quantity;
+        return quantity;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public Double setAmount(Double amount) {
         this.amount = amount;
+        return amount;
     }
 
 
-    public Product(String SKU, String name, Double price,int quantity, int amount) {
+    public Product(String SKU, String name, Double price,int quantity, Double amount) {
         this.SKU = SKU;
         Name = name;
         Price = price;
