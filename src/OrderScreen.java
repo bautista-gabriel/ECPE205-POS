@@ -76,7 +76,7 @@ public class OrderScreen extends JFrame {
                            int newQuantity =  p.setQuantity(currentQuantity + 1); //increment the quantity
 
 
-                          Double newAmount = p.setAmount((Double) (newQuantity * p.getPrice())); // set total amount of the product when its added
+                          p.setAmount(newQuantity * p.getPrice()); // set total amount of the product when its added
 
                            total[0]=0;
                            for(int j=0; j<productList.size();j++) {
