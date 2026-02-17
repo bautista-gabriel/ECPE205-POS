@@ -1,10 +1,12 @@
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 
 public class Main {
     public static void main(String[]args) {
-        new OrderScreen();
-        new ProductScreen();
+        ArrayList<Product> productList = new ArrayList<Product>();
+        new OrderScreen(productList);
+        new ProductScreen(productList);
     }
 }

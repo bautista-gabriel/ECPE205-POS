@@ -6,18 +6,22 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class OrderScreen extends JFrame {
+    ArrayList<Product> productList;
 
-   public  OrderScreen() {
+   public  OrderScreen(ArrayList<Product> productList) {
+        this.productList = productList;
        JFrame frame = new JFrame("Order Screen");
        Container container = frame.getContentPane();
        container.setLayout(new GridBagLayout());
        JTextField field = new JTextField(10);
        JLabel SKULabel = new JLabel("SKU:");
+       final double[] total = {0};
+       JLabel totalAmount = new JLabel("Total: " + total[0]);
+
 
        addComponent(1,0,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,4,frame,field);
        addComponent(0,0,GridBagConstraints.CENTER,GridBagConstraints.NONE,frame,SKULabel);
-
-       ArrayList<Product> product = new ArrayList<>();
+       addComponent(0,2,GridBagConstraints.EAST,GridBagConstraints.NONE,frame,totalAmount);
 
        JTable table = new JTable(new AbstractTableModel() {
 
@@ -29,22 +33,28 @@ public class OrderScreen extends JFrame {
 
            @Override
            public int getRowCount() {
-               return 0;
+
+               return productList.size();
            }
 
            @Override
            public int getColumnCount() {
+
                return 5;
            }
 
            @Override
            public Object getValueAt(int rowIndex, int columnIndex) {
                if (columnIndex == 0){
-                   return product.get(rowIndex).getSKU();
+                   return productList.get(rowIndex).getSKU();
                }else if(columnIndex == 1){
-                   return  product.get(rowIndex).getName();
+                   return  productList.get(rowIndex).getName();
+               }else if(columnIndex == 2){
+                   return productList.get(rowIndex).getPrice();
+               }else if(columnIndex == 3){
+                   return productList.get(rowIndex).getQuantity();
                }else{
-                   return product.get(rowIndex).getPrice();
+                   return productList.get(rowIndex).getAmount();
                }
            }
        });
@@ -61,8 +71,19 @@ public class OrderScreen extends JFrame {
            @Override
            public void keyPressed(KeyEvent e) {
                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                   for(int i=0; i< product.size(); i++){
-                       if(field.getText().equals(product.get(i).getSKU())){
+                   for(int i=0; i< productList.size(); i++){
+                       if(field.getText().equals(productList.get(i).getSKU())){
+                           Product p = productList.get(i);
+                           int currentQuantity = p.getQuantity();
+                           p.setQuantity(currentQuantity + 1); //increment the quantity
+
+                           int currentAmount = p.getAmount();
+                           p.setAmount(currentAmount + currentQuantity);
+
+                           total[0] = currentQuantity * p.getPrice();
+
+                            totalAmount.setText("Total: " + total[0]);
+                           ((AbstractTableModel)table.getModel()).fireTableDataChanged();
 
                        }
                    }

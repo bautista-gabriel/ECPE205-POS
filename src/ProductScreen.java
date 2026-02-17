@@ -6,11 +6,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ProductScreen extends JFrame {
+    ArrayList<Product> productList;
 
+    public  ProductScreen(ArrayList<Product> productList) {
 
-    public  ProductScreen() {
-
-        ArrayList<Product> product = new ArrayList<>();
+        this.productList = productList;
 
         JFrame frame = new JFrame("Product Screen");
         Container container = frame.getContentPane();
@@ -44,7 +44,7 @@ public class ProductScreen extends JFrame {
 
             @Override
             public int getRowCount() {
-                return product.size();
+                return productList.size();
             }
 
             @Override
@@ -55,11 +55,11 @@ public class ProductScreen extends JFrame {
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 if (columnIndex == 0){
-                    return product.get(rowIndex).getSKU();
+                    return productList.get(rowIndex).getSKU();
                 }else if(columnIndex == 1){
-                    return  product.get(rowIndex).getName();
+                    return  productList.get(rowIndex).getName();
                 }else{
-                    return product.get(rowIndex).getPrice();
+                    return productList.get(rowIndex).getPrice();
                 }
             }
 
@@ -72,7 +72,7 @@ public class ProductScreen extends JFrame {
                 String Name = Namefield.getText();
                 Double Price = Double.parseDouble(Pricefield.getText());
 
-                product.add(new Product(SKU, Name, Price));
+                productList.add(new Product(SKU, Name, Price));
                 ((AbstractTableModel)table.getModel()).fireTableDataChanged();
                 SKUfield.setText("");
                 Namefield.setText("");
