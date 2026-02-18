@@ -3,6 +3,8 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class ProductScreen extends JFrame {
@@ -65,19 +67,86 @@ public class ProductScreen extends JFrame {
 
         });
 
+        SKUfield.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    Namefield.requestFocus();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+        Namefield.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    Pricefield.requestFocus();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+        Pricefield.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER && !SKUfield.getText().isEmpty() && !Namefield.getText().isEmpty() && !Pricefield.getText().isEmpty()){
+                    String SKU = SKUfield.getText();
+                    String Name = Namefield.getText();
+                    Double Price = Double.parseDouble(Pricefield.getText());
+
+                    productList.add(new Product(SKU, Name, Price));
+                    ((AbstractTableModel)table.getModel()).fireTableDataChanged();
+                    SKUfield.setText("");
+                    Namefield.setText("");
+                    Pricefield.setText("");
+                    SKUfield.requestFocus();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String SKU = SKUfield.getText();
-                String Name = Namefield.getText();
-                Double Price = Double.parseDouble(Pricefield.getText());
+               if (!SKUfield.getText().isEmpty() && !Namefield.getText().isEmpty() && !Pricefield.getText().isEmpty()) {
+                   String SKU = SKUfield.getText();
+                   String Name = Namefield.getText();
+                   Double Price = Double.parseDouble(Pricefield.getText());
 
-                productList.add(new Product(SKU, Name, Price));
-                ((AbstractTableModel)table.getModel()).fireTableDataChanged();
-                SKUfield.setText("");
-                Namefield.setText("");
-                Pricefield.setText("");
-                SKUfield.requestFocus();
+                   productList.add(new Product(SKU, Name, Price));
+                   ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+                   SKUfield.setText("");
+                   Namefield.setText("");
+                   Pricefield.setText("");
+
+               }
             }
         });
 

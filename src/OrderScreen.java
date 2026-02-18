@@ -33,6 +33,7 @@ public class OrderScreen extends JFrame {
 
            @Override
            public int getRowCount() {
+
                return productList.size();
            }
 
