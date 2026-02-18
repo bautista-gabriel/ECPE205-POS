@@ -107,7 +107,7 @@ public class OrderScreen extends JFrame {
                                 totalAmount.setText("Total: " + total[0]);
                                 ((AbstractTableModel) table.getModel()).fireTableDataChanged(); //update table
                             }else{
-                                if(p.getProductType()==true){
+                                if(p.getProductType()==true){ //if basic commodity
                                     int currentQuantity = p.getQuantity();
                                     int newQuantity = p.setQuantity(currentQuantity + 1);
 
