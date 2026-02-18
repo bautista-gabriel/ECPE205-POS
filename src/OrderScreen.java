@@ -15,19 +15,27 @@ public class OrderScreen extends JFrame {
        container.setLayout(new GridBagLayout());
        JTextField field = new JTextField(10);
        JLabel SKULabel = new JLabel("SKU:");
+       JCheckBox checkbox = new JCheckBox("Senior Citizen/ PWD Discount");
        final double[] total = {0};
+       final double[] LESSVAT = {0};
+       final double[] LESSPWDSCDSC = {0};
+       JLabel lessVAT = new JLabel("Less VAT: " + LESSVAT[0]);
+       JLabel lessPWDSCDSC = new JLabel("Less Senior Citizen/PWD Discount: " + LESSPWDSCDSC[0]);
        JLabel totalAmount = new JLabel("Total: " + total[0]);
 
 
-       addComponent(1,0,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,4,frame,field);
-       addComponent(0,0,GridBagConstraints.CENTER,GridBagConstraints.NONE,frame,SKULabel);
-       addComponent(0,2,GridBagConstraints.EAST,GridBagConstraints.NONE,frame,totalAmount);
+       addComponent(1,0,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,10,frame,field);
+       addComponent(0,0,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,frame,SKULabel);
+       addComponent(1,1,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,frame,checkbox);
+       addComponent(0,5,GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL,frame,totalAmount);
+       addComponent(0,3,GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL,frame,lessVAT);
+       addComponent(0,4,GridBagConstraints.EAST,GridBagConstraints.HORIZONTAL,frame,lessPWDSCDSC);
 
        JTable table = new JTable(new AbstractTableModel() {
 
            @Override
            public String getColumnName(int column){
-               String[] columns = new String[] {"SKU", "Name", "Price", "Quantity", "Amount"};
+               String[] columns = new String[] {"SKU", "Name", "Price", "Quantity", "Basic Commodity","Senior Citizen/PWD", "Amount"};
                return columns[column];
            }
 
@@ -39,7 +47,7 @@ public class OrderScreen extends JFrame {
 
            @Override
            public int getColumnCount() {
-               return 5;
+               return 7;
            }
 
            @Override
@@ -52,13 +60,17 @@ public class OrderScreen extends JFrame {
                    return productList.get(rowIndex).getPrice();
                }else if(columnIndex == 3){
                    return productList.get(rowIndex).getQuantity();
+               }else if(columnIndex ==4){
+                   return productList.get(rowIndex).getProductType();
+               }else if(columnIndex==5){
+                   return productList.get(rowIndex).getCitizenType();
                }else{
-                   return productList.get(rowIndex).getAmount();
+                   return  productList.get(rowIndex).getAmount();
                }
            }
        });
 
-       addComponent(0,1,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,5,frame,new JScrollPane(table));
+       addComponent(0,2,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,10,frame,new JScrollPane(table));
 
 
        field.addKeyListener(new KeyListener() {
@@ -73,18 +85,52 @@ public class OrderScreen extends JFrame {
                    for(int i=0; i< productList.size(); i++){
                        if(field.getText().equals(productList.get(i).getSKU())){
                            Product p = productList.get(i);
-                           int currentQuantity = p.getQuantity();
-                           int newQuantity =  p.setQuantity(currentQuantity + 1); //increment the quantity
 
+                           if(checkbox.isSelected()){
 
-                          p.setAmount(newQuantity * p.getPrice()); // set total amount of the product when its added
+                               p.setCitizenType(true);
+                           }else{
 
-                           total[0]=0;
-                           for(int j=0; j<productList.size();j++) {
-                               total[0] += productList.get(j).getAmount(); //calculate total
-                           }//update
-                            totalAmount.setText("Total: " + total[0]);
-                           ((AbstractTableModel)table.getModel()).fireTableDataChanged(); //update table
+                               p.setCitizenType(false);
+                           }
+
+                           //determine the total if citizen is senior/pwd or just a regular citizen (apply the discounts if necessary)
+                            if(p.getCitizenType() == false) {
+                                int currentQuantity = p.getQuantity();
+                                int newQuantity = p.setQuantity(currentQuantity + 1); //increment the quantity
+                                p.setAmount(newQuantity * p.getPrice()); // set total amount of the product when its added
+
+                                total[0] = 0;
+                                for (int j = 0; j < productList.size(); j++) {
+                                    total[0] += productList.get(j).getAmount(); //calculate total
+                                }//update
+                                totalAmount.setText("Total: " + total[0]);
+                                ((AbstractTableModel) table.getModel()).fireTableDataChanged(); //update table
+                            }else{
+                                if(p.getProductType()==true){
+                                    int currentQuantity = p.getQuantity();
+                                    int newQuantity = p.setQuantity(currentQuantity + 1);
+
+                                    double CommodityDiscount = 0;
+                                   CommodityDiscount = p.getPrice() * 0.05;
+
+                                   double discountedPrice = 0;
+
+                                  discountedPrice =  p.setAmount(p.getPrice()-CommodityDiscount);
+
+                                  p.setAmount(newQuantity * discountedPrice);
+
+                                    total[0] = 0;
+                                    LESSPWDSCDSC[0]=CommodityDiscount;
+                                    for (int j = 0; j < productList.size(); j++) {
+                                        total[0] += productList.get(j).getAmount(); //calculate total
+                                    }//update
+                                    totalAmount.setText("Total: " + total[0]);
+                                    lessPWDSCDSC.setText("Less Senior Citizen/PWD Discount: " + LESSPWDSCDSC[0]);
+                                    ((AbstractTableModel) table.getModel()).fireTableDataChanged(); //update table
+
+                                }
+                            }
 
                        }
                    }
@@ -97,7 +143,7 @@ public class OrderScreen extends JFrame {
            }
        });
 
-       frame.setSize(500, 500);
+       frame.setSize(1000, 1000);
        frame.setVisible(true);
        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 

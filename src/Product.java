@@ -3,12 +3,31 @@ public class Product {
     private String SKU,Name;
     private Double Price;
     private int quantity;
-        Double amount;
+     private   Double amount;
+      private  Boolean ProductType;
+      private Boolean CitizenType;
 
-    public Product(String SKU, String name, Double price) {
+    public Boolean getCitizenType() {
+        return CitizenType;
+    }
+
+    public void setCitizenType(Boolean citizenType) {
+        CitizenType = citizenType;
+    }
+
+    public Boolean getProductType() {
+        return ProductType;
+    }
+
+    public void setProductType(Boolean productType) {
+        ProductType = productType;
+    }
+
+    public Product(String SKU, String name, Double price,Boolean productType) {
         this.SKU = SKU;
         Price = price;
         Name = name;
+        ProductType = productType;
     }
 
     public int getQuantity() {
@@ -30,12 +49,14 @@ public class Product {
     }
 
 
-    public Product(String SKU, String name, Double price,int quantity, Double amount) {
+    public Product(String SKU, String name, Double price,int quantity, Double amount, Boolean productType, Boolean citizenType) {
         this.SKU = SKU;
         Name = name;
         Price = price;
         this.quantity = quantity;
         this.amount = amount;
+        ProductType = productType;
+        CitizenType = citizenType;
     }
 
     public String getSKU() {

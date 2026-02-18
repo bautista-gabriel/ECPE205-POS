@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class ProductScreen extends JFrame {
@@ -23,6 +20,7 @@ public class ProductScreen extends JFrame {
         JLabel NameLabel = new JLabel("Name:");
         JTextField Pricefield = new JTextField(10);
         JLabel PriceLabel = new JLabel("Price:");
+        JCheckBox checkbox = new JCheckBox("Basic Commodity");
         JButton saveButton = new JButton("Save");
 
 
@@ -33,14 +31,15 @@ public class ProductScreen extends JFrame {
         addComponent(0,1,GridBagConstraints.CENTER,GridBagConstraints.NONE,frame,NameLabel);
         addComponent(1,2,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,4,frame,Pricefield);
         addComponent(0,2,GridBagConstraints.CENTER,GridBagConstraints.NONE,frame,PriceLabel);
-        addComponent(4,3,GridBagConstraints.CENTER,frame,saveButton);
+        addComponent(1,3, GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,frame,checkbox);
+        addComponent(3,4,GridBagConstraints.CENTER,frame,saveButton);
 
 
         JTable table = new JTable(new AbstractTableModel() {
 
             @Override
             public String getColumnName(int column){
-                String[] columns = new String[] {"SKU", "Name", "Price"};
+                String[] columns = new String[] {"SKU", "Name", "Price", "Basic Commodity"};
                 return columns[column];
             }
 
@@ -51,7 +50,7 @@ public class ProductScreen extends JFrame {
 
             @Override
             public int getColumnCount() {
-                return 3;
+                return 4;
             }
 
             @Override
@@ -60,12 +59,15 @@ public class ProductScreen extends JFrame {
                     return productList.get(rowIndex).getSKU();
                 }else if(columnIndex == 1){
                     return  productList.get(rowIndex).getName();
-                }else{
+                }else if (columnIndex == 2){
                     return productList.get(rowIndex).getPrice();
+                }else{
+                    return  productList.get(rowIndex).getProductType();
                 }
             }
 
         });
+
 
         SKUfield.addKeyListener(new KeyListener() {
             @Override
@@ -116,8 +118,16 @@ public class ProductScreen extends JFrame {
                     String SKU = SKUfield.getText();
                     String Name = Namefield.getText();
                     Double Price = Double.parseDouble(Pricefield.getText());
+                    Boolean ProductType;
 
-                    productList.add(new Product(SKU, Name, Price));
+                    if(checkbox.isSelected()){
+                        ProductType = true;
+                    }else{
+                        ProductType = false;
+                    }
+
+
+                    productList.add(new Product(SKU, Name, Price, ProductType ));
                     ((AbstractTableModel)table.getModel()).fireTableDataChanged();
                     SKUfield.setText("");
                     Namefield.setText("");
@@ -139,8 +149,14 @@ public class ProductScreen extends JFrame {
                    String SKU = SKUfield.getText();
                    String Name = Namefield.getText();
                    Double Price = Double.parseDouble(Pricefield.getText());
+                   Boolean ProductType;
 
-                   productList.add(new Product(SKU, Name, Price));
+                   if(checkbox.isSelected()){
+                       ProductType = true;
+                   }else{
+                       ProductType = false;
+                   }
+                   productList.add(new Product(SKU, Name, Price, ProductType));
                    ((AbstractTableModel) table.getModel()).fireTableDataChanged();
                    SKUfield.setText("");
                    Namefield.setText("");
@@ -150,7 +166,7 @@ public class ProductScreen extends JFrame {
             }
         });
 
-        addComponent(0,4,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,5,frame,new JScrollPane(table));
+        addComponent(0,6,GridBagConstraints.CENTER,GridBagConstraints.HORIZONTAL,5,frame,new JScrollPane(table));
 
         frame.setSize(1000, 1000);
         frame.setVisible(true);
