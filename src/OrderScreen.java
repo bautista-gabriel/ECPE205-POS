@@ -129,6 +129,33 @@ public class OrderScreen extends JFrame {
                                     lessPWDSCDSC.setText("Less Senior Citizen/PWD Discount: " + LESSPWDSCDSC[0]);
                                     ((AbstractTableModel) table.getModel()).fireTableDataChanged(); //update table
 
+                                }else{
+                                    //non basic commodity
+                                    int currentQuantity = p.getQuantity();
+                                    int newQuantity = p.setQuantity(currentQuantity + 1);
+
+                                    double tax = 0; //tax removal
+                                    tax = (p.getPrice()/1.12) * 0.12;
+
+                                    double NONCommodityDiscount = 0;
+                                    NONCommodityDiscount = (p.getPrice()/1.12) * 0.20;
+
+                                    double discountedPrice = 0;
+
+                                    discountedPrice =  p.setAmount(p.getPrice() - tax - NONCommodityDiscount);
+
+                                    p.setAmount(newQuantity * discountedPrice);
+
+                                    total[0] = 0;
+                                    LESSPWDSCDSC[0]= NONCommodityDiscount;
+                                    LESSVAT[0] = tax;
+                                    for (int j = 0; j < productList.size(); j++) {
+                                        total[0] += productList.get(j).getAmount(); //calculate total
+                                    }//update
+                                    lessVAT.setText("Less VAT: " + LESSVAT[0]);
+                                    totalAmount.setText("Total: " + total[0]);
+                                    lessPWDSCDSC.setText("Less Senior Citizen/PWD Discount: " + LESSPWDSCDSC[0]);
+                                    ((AbstractTableModel) table.getModel()).fireTableDataChanged(); //update table
                                 }
                             }
 
