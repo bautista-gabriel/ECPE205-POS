@@ -3,7 +3,7 @@ import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+//submitted by Angelo Gabriel G. Bautista - 1010036
 public class ProductScreen extends JFrame {
     ArrayList<Product> productList;
 

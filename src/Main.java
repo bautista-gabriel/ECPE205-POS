@@ -2,6 +2,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+//submitted by Angelo Gabriel G. Bautista - 1010036
 
 
 public class Main {

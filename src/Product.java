@@ -1,5 +1,5 @@
 public class Product {
-
+    //submitted by Angelo Gabriel G. Bautista - 1010036
     private String SKU,Name;
     private Double Price;
     private int quantity;
